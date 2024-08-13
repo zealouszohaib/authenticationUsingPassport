@@ -2,6 +2,7 @@ const { v4: uuidv4 } = require("uuid");
 const validate = require("validate.js");
 const constraints = require("../lib/contraints");
 const bcrypt = require("bcrypt");
+const DB=require('../lib/db')
 
 let _ = class User {
   constructor() {
@@ -18,8 +19,8 @@ let _ = class User {
     this.banned = false;
   }
 
-  save() {
-    console.log(`sucessfully saved user ${this.id} to dataBase`);
+  save(data) {
+    DB.write(data)
   }
 
   find(id) {
