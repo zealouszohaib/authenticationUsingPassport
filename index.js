@@ -21,6 +21,9 @@ _.start = () => {
     throw new Error(error);
   }
 };
+
+
+
 app.use(
   cookieSession({
     name: "app-auth",
@@ -54,6 +57,7 @@ passport.use(
   "local",
   new LocalStretegy(
     { passReqToCallback: true },
+    
     async (req, username, password, done) => {
       console.log(`2- locale stretegy ${JSON.stringify(username)}`);
 
@@ -62,16 +66,18 @@ passport.use(
       if (!user) return done(null, false);
 
       const result = await new Promise((resolve, reject) => {
+
         bcrypt.compare(password, user.security.passwordHash, (err, res) => {
           if (err) reject(err);
           resolve(res);
+
         });
+
       });
 
       if (result) done(null, user);
       else done("passs]word or username is incorrect", null);
 
-      // return done(null, { id: "test" });
     }
   )
 );

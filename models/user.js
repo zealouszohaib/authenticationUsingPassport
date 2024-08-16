@@ -2,25 +2,32 @@ const { v4: uuidv4 } = require("uuid");
 const validate = require("validate.js");
 const constraints = require("../lib/contraints");
 const bcrypt = require("bcrypt");
-const DB=require('../lib/db')
+const DB = require("../lib/db");
 
 let _ = class User {
   constructor() {
     this.created = new Date();
+    
     this.id = uuidv4();
+
     this.name = {
       first: null,
       last: null,
     };
+
     this.email = null;
+
     this.security = {
       passwordHash: null,
     };
+
     this.banned = false;
+
+    this.isVerified=false;
   }
 
-  save(data) {
-    DB.write(data)
+  save() {
+    DB.write(this);
   }
 
   find(id) {
@@ -84,12 +91,10 @@ let _ = class User {
 
     let msg = await validate.single(password, constraints.password);
 
-    console.log(msg);
-
+    // console.log(msg);
 
     if (msg) return msg;
-
-    else this.security.passwordHash =await bcrypt.hash(password, 10);
+    else this.security.passwordHash = await bcrypt.hash(password, 10);
 
     console.log(this.security.passwordHash);
   }
